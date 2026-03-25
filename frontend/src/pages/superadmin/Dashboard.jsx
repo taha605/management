@@ -87,8 +87,8 @@ export default function SuperAdminDashboard() {
             <div className="sa-main">
                 <div className="sa-header">
                     <h1 className="sa-title">Gestion des Admins</h1>
-                    <button onClick={() => setShowForm(!showForm)} className="btn-new">
-                        {showForm ? <><X /> Annuler</> : '+ Ajouter Admin'}
+                    <button onClick={() => setShowForm(true)} className="btn-new">
+                        + Ajouter Admin
                     </button>
                 </div>
 
@@ -96,39 +96,52 @@ export default function SuperAdminDashboard() {
                 {error && <div className="alert-error">{error}</div>}
 
                 {showForm && (
-                    <div className="form-card">
-                        <h3>Nouvel Admin</h3>
-                        <form onSubmit={handleSubmit}>
-                            <div className="form-row">
-                                <div className="input-group">
-                                    <label>Nom *</label>
-                                    <input name="nom" placeholder="Entre Nom" value={form.nom} onChange={handleChange} required />
+                    <div className="sa-modal-overlay" onClick={() => setShowForm(false)}>
+                        <div className="sa-modal" onClick={(e) => e.stopPropagation()}>
+                            <div className="sa-modal-header">
+                                <h3>Nouvel Admin</h3>
+                                <button
+                                    type="button"
+                                    className="sa-modal-close"
+                                    onClick={() => setShowForm(false)}
+                                    aria-label="Fermer"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleSubmit} className="sa-form">
+                                <div className="form-row">
+                                    <div className="input-group">
+                                        <label>Nom *</label>
+                                        <input name="nom" placeholder="Entrer nom" value={form.nom} onChange={handleChange} required />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>Prénom *</label>
+                                        <input name="prenom" placeholder="Entrer prénom" value={form.prenom} onChange={handleChange} required />
+                                    </div>
                                 </div>
                                 <div className="input-group">
-                                    <label>Prénom *</label>
-                                    <input name="prenom" placeholder="Entre Prenom" value={form.prenom} onChange={handleChange} required />
-                                </div>
-                            </div>
-                            <div className="input-group">
-                                <label>Email *</label>
-                                <input type="email" name="email" placeholder="entre email" value={form.email} onChange={handleChange} required />
-                            </div>
-                            <div className="input-group">
-                                <label>Mot de passe *</label>
-                                <input type="password" name="password" placeholder="Create Mode Passe" value={form.password} onChange={handleChange} required />
-                            </div>
-                            <div className="form-row">
-                                <div className="input-group">
-                                    <label>Téléphone</label>
-                                    <input name="telephone" placeholder="Telephone" value={form.telephone} onChange={handleChange} />
+                                    <label>Email *</label>
+                                    <input type="email" name="email" placeholder="Entrer email" value={form.email} onChange={handleChange} required />
                                 </div>
                                 <div className="input-group">
-                                    <label>Ville</label>
-                                    <input name="ville" placeholder="Ville" value={form.ville} onChange={handleChange} />
+                                    <label>Mot de passe *</label>
+                                    <input type="password" name="password" placeholder="Créer mot de passe" value={form.password} onChange={handleChange} required />
                                 </div>
-                            </div>
-                            <button type="submit" className="btn-submit">Créer Admin</button>
-                        </form>
+                                <div className="form-row">
+                                    <div className="input-group">
+                                        <label>Téléphone</label>
+                                        <input name="telephone" placeholder="Téléphone" value={form.telephone} onChange={handleChange} />
+                                    </div>
+                                    <div className="input-group">
+                                        <label>Ville</label>
+                                        <input name="ville" placeholder="Ville" value={form.ville} onChange={handleChange} />
+                                    </div>
+                                </div>
+                                <button type="submit" className="btn-submit">Créer Admin</button>
+                            </form>
+                        </div>
                     </div>
                 )}
 
@@ -155,7 +168,7 @@ export default function SuperAdminDashboard() {
                                                 {a.is_active ? 'Actif' : 'Inactif'}
                                             </span>
                                         </td>
-                                        <td>
+                                        <td className="actions-cell">
                                             <button
                                                 onClick={() => handleToggle(a.id)}
                                                 className={a.is_active ? 'btn-disable' : 'btn-enable'}>

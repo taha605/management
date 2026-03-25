@@ -17,6 +17,6 @@ pool.getConnection()
         conn.release()
     })
     .catch(err => {
-        console.error('Erreur Mysql' , err.message)
+        console.error('Database not connected' , err.message)
     })
     module.exports = pool;
