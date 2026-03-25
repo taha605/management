@@ -3,7 +3,9 @@ import { AuthProvider, useAuth } from "./context/AuthContext"
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ClientDashboard from './pages/client/Dashboard'
+import ReclamationsList from './pages/client/ReclamationsList'
 import AdminDashboard from './pages/admin/Dashboard'
+import AdminReclamations from './pages/admin/Reclamations'
 import TechnicienDashboard from './pages/technicien/Dashboard'
 import AdminUsers from './pages/admin/Users'
 import SuperAdminDashboard from './pages/superadmin/Dashboard'
@@ -32,6 +34,18 @@ function App() {
             </PrivateRoute>
           } />
 
+          <Route path="/dashboard-client" element={
+            <PrivateRoute roles={['client']}>
+              <ClientDashboard/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/reclamations-client" element={
+            <PrivateRoute roles={['client']}>
+              <ReclamationsList/>
+            </PrivateRoute>
+          } />
+
           <Route path="/superadmin" element={
              <PrivateRoute roles={['superadmin']}>
               <SuperAdminDashboard />
@@ -41,6 +55,12 @@ function App() {
           <Route path="/admin" element={
             <PrivateRoute roles={['admin']}>
               <AdminDashboard/>
+            </PrivateRoute>
+          } />
+
+          <Route path="/admin/reclamations" element={
+            <PrivateRoute roles={['admin']}>
+              <AdminReclamations />
             </PrivateRoute>
           } />
 

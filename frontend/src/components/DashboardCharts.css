@@ -1,0 +1,130 @@
+/* Dashboard Charts */
+.dashboard-charts {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+/* Stats Container */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    background: #0D9E75;
+    padding: 24px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(13, 158, 117, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+.chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.chart-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 20px 0;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+}
+
+.chart-container.horizontal {
+    height: 200px;
+}
+
+.chart-container canvas {
+    max-height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        padding: 16px;
+    }
+
+    .stat-number {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 12px;
+    }
+
+    .stat-number {
+        font-size: 24px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    .chart-card {
+        padding: 16px;
+    }
+
+    .chart-title {
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .chart-container {
+        height: 250px;
+    }
+
+    .chart-container.horizontal {
+        height: 180px;
+    }
+}

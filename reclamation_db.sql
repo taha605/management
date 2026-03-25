@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS reclamation_db;
 USE reclamation_db;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     nom        VARCHAR(100) NOT NULL,
     prenom     VARCHAR(100) NOT NULL,
@@ -11,20 +11,20 @@ CREATE TABLE users (
     telephone  VARCHAR(20),
     adresse    TEXT,
     ville      VARCHAR(100),
-    role       ENUM('client', 'technicien', 'admin') DEFAULT 'client',
+    role       ENUM('client', 'technicien', 'admin', 'superadmin') DEFAULT 'client',
     is_active  BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories_appareils (
+CREATE TABLE IF NOT EXISTS categories_appareils (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     nom         VARCHAR(100) NOT NULL,
     description TEXT,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE reclamations (
+CREATE TABLE IF NOT EXISTS reclamations (
     id                      INT AUTO_INCREMENT PRIMARY KEY,
     reference               VARCHAR(20) UNIQUE NOT NULL,
     client_id               INT NOT NULL,
@@ -42,10 +42,10 @@ CREATE TABLE reclamations (
     note_client             TINYINT DEFAULT NULL CHECK (note_client BETWEEN 1 AND 5),
     commentaire_client      TEXT DEFAULT NULL,
     date_reclamation        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    date_assignation        TIMESTAMP DEFAULT NULL,
-    date_debut_intervention TIMESTAMP DEFAULT NULL,
-    date_resolution         TIMESTAMP DEFAULT NULL,
-    date_fermeture          TIMESTAMP DEFAULT NULL,
+    date_assignation        TIMESTAMP NULL DEFAULT NULL,
+    date_debut_intervention TIMESTAMP NULL DEFAULT NULL,
+    date_resolution         TIMESTAMP NULL DEFAULT NULL,
+    date_fermeture          TIMESTAMP NULL DEFAULT NULL,
     created_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at              TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (client_id)     REFERENCES users(id) ON DELETE CASCADE,
@@ -53,7 +53,7 @@ CREATE TABLE reclamations (
     FOREIGN KEY (categorie_id)  REFERENCES categories_appareils(id) ON DELETE SET NULL
 );
 
-CREATE TABLE reclamations_historique (
+CREATE TABLE IF NOT EXISTS reclamations_historique (
     id                      INT AUTO_INCREMENT PRIMARY KEY,
     reclamation_id          INT NOT NULL,
     version                 INT NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE reclamations_historique (
     FOREIGN KEY (modifie_par)    REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE historique_statuts (
+CREATE TABLE IF NOT EXISTS historique_statuts (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     reclamation_id INT NOT NULL,
     ancien_statut  VARCHAR(50),
@@ -83,7 +83,7 @@ CREATE TABLE historique_statuts (
     FOREIGN KEY (changed_by)     REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
     id             INT AUTO_INCREMENT PRIMARY KEY,
     user_id        INT NOT NULL,
     reclamation_id INT DEFAULT NULL,
@@ -148,7 +148,7 @@ CREATE PROCEDURE sp_register_user(
     OUT p_success   BOOLEAN,
     OUT p_message   VARCHAR(200)
 )
-BEGIN
+sp_register_user: BEGIN
     IF EXISTS (SELECT 1 FROM users WHERE email = p_email) THEN
         SET p_success = FALSE;
         SET p_message = 'Email déjà utilisé';
@@ -156,7 +156,7 @@ BEGIN
         LEAVE sp_register_user;
     END IF;
 
-    IF p_role NOT IN ('client', 'technicien', 'admin') THEN
+    IF p_role NOT IN ('client', 'technicien', 'admin', 'superadmin') THEN
         SET p_success = FALSE;
         SET p_message = 'Rôle invalide';
         SET p_user_id = NULL;
@@ -172,14 +172,14 @@ BEGIN
         INSERT INTO notifications (user_id, titre, message)
         SELECT id,
             'Nouvel utilisateur',
-            CONCAT(p_prenom, ' ', p_nom, ' vient de s\'inscrire)
+            CONCAT(p_prenom, ' ', p_nom, ' vient de s''inscrire')
         FROM users WHERE role = 'admin';
     END IF;
 
     SET p_success = TRUE;
     SET p_message = 'Compte créé avec succès';
-END$$
-3
+END sp_register_user$$
+
 CREATE PROCEDURE sp_create_reclamation(
     IN  p_client_id       INT,
     IN  p_marque          VARCHAR(100),
@@ -230,7 +230,7 @@ CREATE PROCEDURE sp_assign_technicien(
     OUT p_success        BOOLEAN,
     OUT p_message        VARCHAR(200)
 )
-BEGIN
+sp_assign_technicien: BEGIN
     DECLARE v_ancien_statut VARCHAR(50);
     DECLARE v_reference     VARCHAR(20);
     DECLARE v_client_id     INT;
@@ -275,7 +275,7 @@ BEGIN
 
     SET p_success = TRUE;
     SET p_message = 'Technicien assigné avec succès';
-END$$
+END sp_assign_technicien$$
 
 
 CREATE PROCEDURE sp_update_statut(
@@ -286,7 +286,7 @@ CREATE PROCEDURE sp_update_statut(
     OUT p_success        BOOLEAN,
     OUT p_message        VARCHAR(200)
 )
-BEGIN
+sp_update_statut: BEGIN
     DECLARE v_ancien_statut VARCHAR(50);
     DECLARE v_reference     VARCHAR(20);
     DECLARE v_client_id     INT;
@@ -338,7 +338,7 @@ BEGIN
 
     SET p_success = TRUE;
     SET p_message = CONCAT('Statut changé: ', v_ancien_statut, ' → ', p_nouveau_statut);
-END$$
+END sp_update_statut$$
 
 CREATE PROCEDURE sp_update_reclamation(
     IN  p_reclamation_id INT,
@@ -353,7 +353,7 @@ CREATE PROCEDURE sp_update_reclamation(
     OUT p_success        BOOLEAN,
     OUT p_message        VARCHAR(200)
 )
-BEGIN
+sp_update_reclamation: BEGIN
     DECLARE v_version INT;
     DECLARE v_statut  VARCHAR(50);
     DECLARE v_owner   INT;
@@ -412,7 +412,7 @@ BEGIN
 
     SET p_success = TRUE;
     SET p_message = CONCAT('Modifiée — version ', v_version, ' archivée');
-END$$
+END sp_update_reclamation$$
 
 DELIMITER ;
 
@@ -442,7 +442,7 @@ BEGIN
     IF NEW.priorite = 'urgente' THEN
         INSERT INTO notifications (user_id, reclamation_id, titre, message)
         SELECT id, NEW.id,
-            '🚨 Réclamation URGENTE',
+            'Réclamation URGENTE',
             CONCAT('Réclamation urgente ', NEW.reference,
                    ' — ', NEW.marque,
                    ' — ', NEW.ville_intervention)
@@ -470,7 +470,7 @@ BEGIN
         IF v_charge >= 5 THEN
             INSERT INTO notifications (user_id, reclamation_id, titre, message)
             SELECT id, NEW.id,
-                '⚠️ Technicien surchargé',
+                'Technicien surchargé',
                 CONCAT('Le technicien ID ', NEW.technicien_id,
                        ' a ', v_charge, ' réclamations actives')
             FROM users WHERE role = 'admin' AND is_active = TRUE;
@@ -493,7 +493,7 @@ BEGIN
         IF v_heures > 48 THEN
             INSERT INTO notifications (user_id, reclamation_id, titre, message)
             SELECT id, OLD.id,
-                '⏰ Réclamation en retard',
+                'Réclamation en retard',
                 CONCAT('Réclamation ', OLD.reference,
                        ' était en attente depuis ', v_heures, 'h')
             FROM users WHERE role = 'admin' AND is_active = TRUE;
@@ -503,7 +503,7 @@ BEGIN
             VALUES (
                 OLD.id, OLD.statut, NEW.statut,
                 NEW.technicien_id,
-                CONCAT('⚠️ Retard: réclamation était en attente ', v_heures, 'h')
+                CONCAT('Retard: réclamation était en attente ', v_heures, 'h')
             );
         END IF;
 

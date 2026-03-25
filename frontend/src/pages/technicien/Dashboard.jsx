@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
 import { Wrench, HardHat, User, Smartphone, MapPin, Phone, Calendar, Circle, Play, Check } from 'lucide-react'
+import TechSidebar from '../../components/TechSidebar'
 import './Dashboard.css'
 
 export default function TechnicienDashboard() {
@@ -40,68 +41,99 @@ export default function TechnicienDashboard() {
         }
     }
 
-    const getStatutColor = (statut) => {
-        const colors = {
-            en_attente: '#f39c12', assignee: '#3498db',
-            en_cours: '#9b59b6', resolue: '#27ae60',
-            fermee: '#95a5a6', annulee: '#e74c3c'
+    const formatStatus = (statut) => {
+        const statusMap = {
+            'en_attente': 'En attente',
+            'assignee': 'Assignée',
+            'en_cours': 'En cours',
+            'resolue': 'Résolue',
+            'fermee': 'Fermée',
+            'annulee': 'Annulée'
         }
-        return colors[statut] || '#888'
+        return statusMap[statut] || statut
     }
-
-    const handleLogout = () => { logout(); navigate('/login') }
 
     return (
         <div className="tech-container">
-            <nav className="tech-nav">
-                <div className="nav-brand"><Wrench /> ReclamationPro</div>
-                <div className="nav-right">
-                    <span className="nav-user"><HardHat /> {user?.prenom} {user?.nom}</span>
-                    <Link to="/profile" className="nav-link"><User /> Profil</Link>
-                    <button onClick={handleLogout} className="btn-logout">Déconnexion</button>
-                </div>
-            </nav>
+            <TechSidebar />
 
             <div className="tech-main">
-                <h1 className="tech-title">Mes Missions</h1>
+                <div className="tech-header">
+                    <h1 className="tech-title">Mes Missions</h1>
+                </div>
 
                 {success && <div className="alert-success">{success}</div>}
                 {error && <div className="alert-error">{error}</div>}
 
                 {loading ? <div className="loading">Chargement...</div> : (
-                    <div className="missions-list">
+                    <div className="reclamations-table-wrap">
                         {reclamations.length === 0 ? (
                             <div className="empty">Aucune mission assignée</div>
-                        ) : reclamations.map(r => (
-                            <div key={r.id} className="mission-card">
-                                <div className="mission-header">
-                                    <strong>{r.reference}</strong>
-                                    <span className="badge" style={{background: getStatutColor(r.statut)}}>
-                                        {r.statut.replace('_', ' ')}
-                                    </span>
+                        ) : (
+                            <>
+                                <div className="table-head">
+                                    <h2 className="table-title">Liste des missions</h2>
+                                    <span className="table-count">{reclamations.length} mission(s)</span>
                                 </div>
-                                <div className="mission-body">
-                                    <p><Smartphone /> {r.marque} {r.modele}</p>
-                                    <p><User /> {r.client_nom}</p>
-                                    <p><MapPin /> {r.adresse_intervention}, {r.ville_intervention}</p>
-                                    <p><Phone /> {r.client_telephone}</p>
-                                    <p><Calendar /> {new Date(r.date_reclamation).toLocaleDateString('fr-FR')}</p>
-                                    <p><Circle className="red-circle" /> {r.description_panne}</p>
+                                <div className="table-responsive">
+                                    <table className="reclamations-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Référence</th>
+                                                <th scope="col">Client</th>
+                                                <th scope="col">Appareil</th>
+                                                <th scope="col">Intervention</th>
+                                                <th scope="col">Statut</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {reclamations.map(r => (
+                                                <tr key={r.id}>
+                                                    <td className="cell-ref">{r.reference}</td>
+                                                    <td>
+                                                        <div className="cell-device">{r.client_nom}</div>
+                                                        <div className="cell-device-model">{r.client_telephone}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="cell-device">{r.marque}</div>
+                                                        <div className="cell-device-model">{r.modele || '-'}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="cell-device">{r.ville_intervention}</div>
+                                                        <div className="cell-device-model">{r.adresse_intervention}</div>
+                                                    </td>
+                                                    <td>
+                                                        <span className={`status-badge rec-${r.statut}`}>
+                                                            {formatStatus(r.statut)}
+                                                        </span>
+                                                    </td>
+                                                    <td className="cell-date">
+                                                        <Calendar size={13} /> {new Date(r.date_reclamation).toLocaleDateString('fr-FR')}
+                                                    </td>
+                                                    <td>
+                                                        {r.statut === 'assignee' && (
+                                                            <button onClick={() => updateStatut(r.id, 'en_cours')} className="btn-action btn-encours">
+                                                                Démarrer
+                                                            </button>
+                                                        )}
+                                                        {r.statut === 'en_cours' && (
+                                                            <button onClick={() => updateStatut(r.id, 'resolue')} className="btn-action btn-resolue">
+                                                                Résoudre
+                                                            </button>
+                                                        )}
+                                                        {r.statut !== 'assignee' && r.statut !== 'en_cours' && (
+                                                            <span className="cell-tech">—</span>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div className="mission-actions">
-                                    {r.statut === 'assignee' && (
-                                        <button onClick={() => updateStatut(r.id, 'en_cours')} className="btn-encours">
-                                            <Play /> Démarrer
-                                        </button>
-                                    )}
-                                    {r.statut === 'en_cours' && (
-                                        <button onClick={() => updateStatut(r.id, 'resolue')} className="btn-resolue">
-                                            <Check /> Marquer résolu
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                            </>
+                        )}
                     </div>
                 )}
             </div>

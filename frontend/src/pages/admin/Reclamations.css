@@ -1,0 +1,317 @@
+﻿/* Admin Reclamations - Modern Design System */
+:root {
+  --primary: #0D9E75;
+  --primary-dark: #0A8763;
+  --primary-light: #E6F5F0;
+  --bg-color: #F7F8FA;
+  --card-bg: #FFFFFF;
+  --text-main: #1D1F24;
+  --text-muted: #6B7280;
+  --border-color: #E8ECEA;
+  --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+  --shadow-md: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+  --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --radius: 12px;
+}
+
+body { background-color: var(--bg-color); }
+
+.reclamations-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background-color: var(--bg-color);
+}
+
+.reclamations-main {
+    flex: 1;
+    margin-left: 280px;
+    padding: 40px;
+    background: var(--bg-color);
+    min-height: 100vh;
+}
+
+.reclamations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.reclamations-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0;
+}
+
+/* Filters Card */
+.filters-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 30px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.filtres {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-filtre {
+    background-color: #F3F4F6;
+    color: var(--text-main);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-filtre:hover { background-color: #E5E7EB; }
+.btn-filtre.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.filtres-avances {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-input, .filter-select, .search-input {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: #F9FAFB;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    min-width: 150px;
+}
+
+.search-bar { width: 100%; margin-top: 10px; }
+.search-input { width: 100%; max-width: 400px; }
+.filter-input:focus, .filter-select:focus, .search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    background-color: white;
+}
+
+.btn-reset {
+    background-color: #FEE2E2;
+    color: #DC2626;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-reset:hover { background-color: #FCA5A5; }
+
+/* Table Wrapper */
+.reclamations-main .table-wrapper {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: none;
+    overflow-x: auto;
+    border: 1px solid #E2E5EA;
+}
+
+.reclamations-main .rec-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout: fixed;
+}
+
+.reclamations-main .rec-table th {
+    background-color: #F9FAFB;
+    color: #8A95A3;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #E2E5EA;
+    white-space: nowrap;
+}
+
+/* Widths */
+.reclamations-main .rec-table th:nth-child(1), .reclamations-main .rec-table td:nth-child(1) { width: 150px; }
+.reclamations-main .rec-table th:nth-child(2), .reclamations-main .rec-table td:nth-child(2) { width: 140px; }
+.reclamations-main .rec-table th:nth-child(3), .reclamations-main .rec-table td:nth-child(3) { width: 150px; }
+.reclamations-main .rec-table th:nth-child(4), .reclamations-main .rec-table td:nth-child(4) { width: 100px; }
+.reclamations-main .rec-table th:nth-child(5), .reclamations-main .rec-table td:nth-child(5) { width: 120px; }
+.reclamations-main .rec-table th:nth-child(6), .reclamations-main .rec-table td:nth-child(6) { width: 110px; }
+.reclamations-main .rec-table th:nth-child(7), .reclamations-main .rec-table td:nth-child(7) { width: 110px; }
+.reclamations-main .rec-table th:nth-child(8), .reclamations-main .rec-table td:nth-child(8) { width: 160px; }
+
+.reclamations-main .rec-table td {
+    padding: 0 20px;
+    border-bottom: 1px solid #E2E5EA;
+    color: #1A1D23;
+    vertical-align: middle;
+    background-color: #FFFFFF;
+    height: 56px;
+    transition: background-color 0.15s ease;
+}
+
+.reclamations-main .rec-table tbody tr:hover td {
+    background-color: #F0F2F5;
+}
+
+.reclamations-main .badge {
+    padding: 3px 10px;
+    border-radius: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.badge-urgent { background-color: #FFF0E8; color: #B84A1A; }
+.badge-normal { background-color: #F1EFE8; color: #5F5E5A; }
+
+.reclamations-main .actions-cell {
+    display: flex;
+    gap: 8px;
+    flex-direction: row;
+    align-items: center;
+    height: 56px;
+}
+
+.reclamations-main .btn-assign {
+    background-color: #0D9E75;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.reclamations-main .btn-historique {
+    background-color: white;
+    color: #1A2421;
+    border: 1px solid #E2E5EA;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    width: 90%;
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.assign-modal { max-width: 500px; }
+.hist-modal { max-width: 600px; }
+
+.modal-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+.close-btn:hover { color: var(--text-main); }
+
+.techniciens-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.tech-card {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+.tech-card:hover { border-color: var(--primary); background: var(--primary-light); }
+
+.tech-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.tech-info div { font-weight: 600; color: var(--text-main); }
+.tech-info small { color: var(--text-muted); }
+
+/* Timeline */
+.timeline { flex: 1; overflow-y: auto; padding-right: 10px; }
+.timeline-item { padding-left: 20px; border-left: 2px solid var(--border-color); position: relative; margin-bottom: 24px; padding-bottom: 10px; }
+.timeline-item:last-child { margin-bottom: 0; border-left-color: transparent; }
+.timeline-item::before {
+    content: ''; position: absolute; left: -6px; top: 0;
+    width: 10px; height: 10px; border-radius: 50%; background-color: var(--primary);
+}
+.tl-date { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; }
+.tl-content { background-color: #F9FAFB; padding: 12px 16px; border-radius: 8px; font-size: 0.95rem; color: var(--text-main); border: 1px solid var(--border-color); }
+.status-change { font-weight: 600; color: var(--primary); }
+
+@media (max-width: 1024px) { .reclamations-main { margin-left: 0; padding: 20px; } }
+

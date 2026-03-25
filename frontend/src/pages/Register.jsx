@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { Mail, Lock, Eye, EyeOff, User, Phone, MapPin } from 'lucide-react'
 import api from '../services/api'
-import { Wrench } from 'lucide-react'
+import { loginIllustrations } from '../assets/illustrations'
 import './Register.css'
 
 export default function Register() {
@@ -9,6 +10,7 @@ export default function Register() {
         nom: '', prenom: '', email: '',
         password: '', telephone: '', ville: ''
     })
+    const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
@@ -32,61 +34,158 @@ export default function Register() {
     }
 
     return (
-        <div className="register-container">
-            <div className="register-card">
-                <div className="register-logo"><Wrench /></div>
-                <h2 className="register-title">Créer un compte</h2>
-                <p className="register-subtitle">Plateforme de gestion des réclamations</p>
+        <div className="register-wrapper">
+            <div className="register-container">
+                {/* Left Side - Illustration */}
+                <div className="register-illustration">
+                    <div className="illustration-content">
+                        <img 
+                            src={loginIllustrations.mainIllustration} 
+                            alt="Register illustration" 
+                            className="illustration-image"
+                        />
+                    </div>
+                </div>
 
-                {error && <div className="register-error">{error}</div>}
+                {/* Right Side - Form */}
+                <div className="register-form-section">
+                    <div className="register-form-card">
+                        <h2 className="form-title">Créer un compte</h2>
+                        <br />
 
-                <form onSubmit={handleSubmit}>
-                    <div className="register-row">
-                        <div className="input-group">
-                            <label>Nom</label>
-                            <input name="nom" placeholder="Alami"
-                                value={form.nom} onChange={handleChange} required />
-                        </div>
-                        <div className="input-group">
-                            <label>Prénom</label>
-                            <input name="prenom" placeholder="Youssef"
-                                value={form.prenom} onChange={handleChange} required />
+                        {error && <div className="register-error-message">{error}</div>}
+
+                        {/* Registration Form */}
+                        <form onSubmit={handleSubmit} className="register-form">
+                            {/* Name Row */}
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="nom" className="form-label">Nom</label>
+                                    <div className="input-wrapper">
+                                        <User className="input-icon" size={18} />
+                                        <input
+                                            id="nom"
+                                            name="nom"
+                                            type="text"
+                                            placeholder="Alami"
+                                            value={form.nom}
+                                            onChange={handleChange}
+                                            required
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="prenom" className="form-label">Prénom</label>
+                                    <div className="input-wrapper">
+                                        <User className="input-icon" size={18} />
+                                        <input
+                                            id="prenom"
+                                            name="prenom"
+                                            type="text"
+                                            placeholder="Youssef"
+                                            value={form.prenom}
+                                            onChange={handleChange}
+                                            required
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Email */}
+                            <div className="form-group">
+                                <label htmlFor="email" className="form-label">Email</label>
+                                <div className="input-wrapper">
+                                    <Mail className="input-icon" size={18} />
+                                    <input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        placeholder="votre@email.com"
+                                        value={form.email}
+                                        onChange={handleChange}
+                                        required
+                                        className="form-input"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Password */}
+                            <div className="form-group">
+                                <label htmlFor="password" className="form-label">Mot de passe</label>
+                                <div className="input-wrapper">
+                                    <Lock className="input-icon" size={18} />
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="••••••••"
+                                        value={form.password}
+                                        onChange={handleChange}
+                                        required
+                                        className="form-input"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="toggle-password"
+                                    >
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Phone and City Row */}
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor="telephone" className="form-label">Téléphone</label>
+                                    <div className="input-wrapper">
+                                        <Phone className="input-icon" size={18} />
+                                        <input
+                                            id="telephone"
+                                            name="telephone"
+                                            type="tel"
+                                            placeholder="06XXXXXXXX"
+                                            value={form.telephone}
+                                            onChange={handleChange}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="ville" className="form-label">Ville</label>
+                                    <div className="input-wrapper">
+                                        <MapPin className="input-icon" size={18} />
+                                        <input
+                                            id="ville"
+                                            name="ville"
+                                            type="text"
+                                            placeholder="Casablanca"
+                                            value={form.ville}
+                                            onChange={handleChange}
+                                            className="form-input"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="register-button"
+                            >
+                                {loading ? 'Création du compte...' : 'Créer un compte'}
+                            </button>
+                        </form>
+
+                        <div className="register-footer">
+                            <p>Vous avez déjà un compte?
+                                <Link to="/login" className="login-link">Connexion</Link>
+                            </p>
                         </div>
                     </div>
-
-                    <div className="input-group">
-                        <label>Email</label>
-                        <input type="email" name="email" placeholder="votre@email.com"
-                            value={form.email} onChange={handleChange} required />
-                    </div>
-
-                    <div className="input-group">
-                        <label>Mot de passe</label>
-                        <input type="password" name="password" placeholder="••••••••"
-                            value={form.password} onChange={handleChange} required />
-                    </div>
-
-                    <div className="register-row">
-                        <div className="input-group">
-                            <label>Téléphone</label>
-                            <input name="telephone" placeholder="06XXXXXXXX"
-                                value={form.telephone} onChange={handleChange} />
-                        </div>
-                        <div className="input-group">
-                            <label>Ville</label>
-                            <input name="ville" placeholder="Casablanca"
-                                value={form.ville} onChange={handleChange} />
-                        </div>
-                    </div>
-
-                    <button type="submit" className={loading ? 'btn-register disabled' : 'btn-register'} disabled={loading}>
-                        {loading ? 'Inscription...' : "S'inscrire"}
-                    </button>
-                </form>
-
-                <p className="register-footer">
-                    Déjà un compte? <Link to="/login">Se connecter</Link>
-                </p>
+                </div>
             </div>
         </div>
     )
