@@ -63,5 +63,35 @@ const isSuperAdmin = (req, res, next) => {
     next()
 }
 
+/** Admin (opérationnel) ou SuperAdmin (pilotage) — typiquement lecture (GET) */
+const isAdminOrSuperAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin' && req.user.role !== 'superadmin') {
+        return res.status(403).json({
+            success: false,
+            message: 'Accès refusé — Administrateur requis'
+        })
+    }
+    next()
+}
 
-module.exports = {verifyToken , isAdmin , isTechnicien , isClient , isSuperAdmin}
+/** Super admin : consultation globale uniquement, pas d’actions opérationnelles ici */
+const forbidSuperAdmin = (req, res, next) => {
+    if (req.user.role === 'superadmin') {
+        return res.status(403).json({
+            success: false,
+            message:
+                'Consultation seule : les modifications opérationnelles sont réservées aux administrateurs. Utilisez les écrans Super admin pour la gestion des comptes.'
+        })
+    }
+    next()
+}
+
+module.exports = {
+    verifyToken,
+    isAdmin,
+    isTechnicien,
+    isClient,
+    isSuperAdmin,
+    isAdminOrSuperAdmin,
+    forbidSuperAdmin
+}

@@ -209,37 +209,62 @@
     text-transform: capitalize;
 }
 
+/* Champ wa7ed: border 3la container, flex = icons mtwssṭin dima */
 .input-wrapper {
-    position: relative;
     display: flex;
+    flex-direction: row;
     align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 0 10px 0 14px;
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    background: var(--bg-input);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.input-icon {
-    position: absolute;
-    left: 14px;
-    font-size: 16px;
-    pointer-events: none;
+.input-wrapper:focus-within {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.input-icon-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
     color: var(--text-muted);
+    pointer-events: none;
+}
+
+.input-icon-slot svg {
+    width: 18px;
+    height: 18px;
+    display: block;
 }
 
 .form-input {
-    width: 100%;
-    padding: 12px 12px 12px 40px;
-    border: 1px solid var(--border-default);
-    border-radius: 8px;
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    padding: 12px 4px 12px 0;
+    border: none;
+    border-radius: 0;
     font-size: 14px;
     color: var(--text-primary);
-    background: var(--bg-input);
-    transition: all 0.3s ease;
+    background: transparent;
+    transition: color 0.2s ease;
     font-family: inherit;
+    box-shadow: none;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: var(--border-focus);
-    background: var(--bg-input);
-    box-shadow: 0 0 0 3px var(--focus-ring);
+    border: none;
+    box-shadow: none;
+    background: transparent;
 }
 
 .form-input::placeholder {
@@ -247,15 +272,27 @@
 }
 
 .toggle-password {
-    position: absolute;
-    right: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-right: -6px;
+    padding: 0;
     background: none;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
     color: var(--text-muted);
-    padding: 4px 8px;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.toggle-password svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
 }
 
 .toggle-password:hover {
@@ -408,8 +445,14 @@
         padding: 10px 14px;
     }
 
+    .input-wrapper {
+        min-height: 44px;
+        padding: 0 8px 0 12px;
+        gap: 8px;
+    }
+
     .form-input {
-        padding: 10px 10px 10px 36px;
+        padding: 10px 2px 10px 0;
         font-size: 13px;
     }
 

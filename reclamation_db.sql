@@ -460,7 +460,6 @@ BEGIN
 
     IF NEW.technicien_id IS NOT NULL AND NEW.statut IN ('assignee', 'en_cours') THEN
 
-        -- 7sb kم réclamations active 3ndo
         SELECT COUNT(*) INTO v_charge
         FROM reclamations
         WHERE technicien_id = NEW.technicien_id

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import api from '../../services/api'
+import { useAuth } from '../../context/AuthContext'
 import AdminSidebar from '../../components/AdminSidebar'
+import SuperAdminSidebar from '../../components/SuperAdminSidebar'
 import './Dashboard.css'
 import { Pie, Bar } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js'
@@ -8,6 +10,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearSca
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement)
 
 export default function AdminDashboard() {
+    const { user } = useAuth()
     const [stats, setStats] = useState(null)
 
     // fetch stats
@@ -62,11 +65,19 @@ export default function AdminDashboard() {
 
     return (
         <div className="admin-container">
-            <AdminSidebar />
+            {user?.role === 'superadmin' ? <SuperAdminSidebar /> : <AdminSidebar />}
             <div className="admin-main">
                 <div className="admin-header">
                     <h1 className="admin-title">Tableau de bord</h1>
                 </div>
+                {user?.role === 'superadmin' && (
+                    <div className="admin-readonly-banner" role="status">
+                        <strong>Vue synthétique — consultation seule.</strong> Ces indicateurs reflètent
+                        l&apos;activité opérationnelle. Les actions sur les réclamations (assignation, etc.)
+                        sont réservées aux <strong>administrateurs</strong>. La création ou modification des
+                        comptes se fait via <strong>Super admin</strong>.
+                    </div>
+                )}
                 {stats && (
                     <>
                     <div className="stats-grid">

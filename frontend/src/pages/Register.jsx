@@ -62,7 +62,9 @@ export default function Register() {
                                 <div className="form-group">
                                     <label htmlFor="nom" className="form-label">Nom</label>
                                     <div className="input-wrapper">
-                                        <User className="input-icon" size={18} />
+                                        <span className="input-icon-slot" aria-hidden>
+                                            <User size={18} strokeWidth={2} />
+                                        </span>
                                         <input
                                             id="nom"
                                             name="nom"
@@ -78,7 +80,9 @@ export default function Register() {
                                 <div className="form-group">
                                     <label htmlFor="prenom" className="form-label">Prénom</label>
                                     <div className="input-wrapper">
-                                        <User className="input-icon" size={18} />
+                                        <span className="input-icon-slot" aria-hidden>
+                                            <User size={18} strokeWidth={2} />
+                                        </span>
                                         <input
                                             id="prenom"
                                             name="prenom"
@@ -97,7 +101,9 @@ export default function Register() {
                             <div className="form-group">
                                 <label htmlFor="email" className="form-label">Email</label>
                                 <div className="input-wrapper">
-                                    <Mail className="input-icon" size={18} />
+                                    <span className="input-icon-slot" aria-hidden>
+                                        <Mail size={18} strokeWidth={2} />
+                                    </span>
                                     <input
                                         id="email"
                                         name="email"
@@ -115,7 +121,9 @@ export default function Register() {
                             <div className="form-group">
                                 <label htmlFor="password" className="form-label">Mot de passe</label>
                                 <div className="input-wrapper">
-                                    <Lock className="input-icon" size={18} />
+                                    <span className="input-icon-slot" aria-hidden>
+                                        <Lock size={18} strokeWidth={2} />
+                                    </span>
                                     <input
                                         id="password"
                                         name="password"
@@ -130,8 +138,9 @@ export default function Register() {
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="toggle-password"
+                                        aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                                     >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        {showPassword ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
                                     </button>
                                 </div>
                             </div>
@@ -141,7 +150,9 @@ export default function Register() {
                                 <div className="form-group">
                                     <label htmlFor="telephone" className="form-label">Téléphone</label>
                                     <div className="input-wrapper">
-                                        <Phone className="input-icon" size={18} />
+                                        <span className="input-icon-slot" aria-hidden>
+                                            <Phone size={18} strokeWidth={2} />
+                                        </span>
                                         <input
                                             id="telephone"
                                             name="telephone"
@@ -156,7 +167,9 @@ export default function Register() {
                                 <div className="form-group">
                                     <label htmlFor="ville" className="form-label">Ville</label>
                                     <div className="input-wrapper">
-                                        <MapPin className="input-icon" size={18} />
+                                        <span className="input-icon-slot" aria-hidden>
+                                            <MapPin size={18} strokeWidth={2} />
+                                        </span>
                                         <input
                                             id="ville"
                                             name="ville"

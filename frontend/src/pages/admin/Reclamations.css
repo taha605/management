@@ -38,6 +38,22 @@ body { background-color: var(--bg-color); }
     margin-bottom: 30px;
 }
 
+.reclamations-readonly-banner {
+    background: #e8f4f2;
+    border: 1px solid #0d9488;
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #1a2421;
+}
+
+.reclamations-readonly-banner strong {
+    color: #0a7269;
+}
+
 .reclamations-title {
     font-size: 1.8rem;
     font-weight: 700;

@@ -61,11 +61,13 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="email" className="form-label">Email</label>
                                 <div className="input-wrapper">
-                                    <Mail className="input-icon" size={18} />
+                                    <span className="input-icon-slot" aria-hidden>
+                                        <Mail size={18} strokeWidth={2} />
+                                    </span>
                                     <input 
                                         id="email"
                                         type="email" 
-                                        placeholder="example@gmail.com"
+                                        placeholder="Votre adresse email"
                                         value={email} 
                                         onChange={(e) => setEmail(e.target.value)} 
                                         required 
@@ -77,11 +79,13 @@ export default function Login() {
                             <div className="form-group">
                                 <label htmlFor="password" className="form-label">Mot de passe</label>
                                 <div className="input-wrapper">
-                                    <Lock className="input-icon" size={18} />
+                                    <span className="input-icon-slot" aria-hidden>
+                                        <Lock size={18} strokeWidth={2} />
+                                    </span>
                                     <input 
                                         id="password"
                                         type={showPassword ? 'text' : 'password'} 
-                                        placeholder="••••••••"
+                                        placeholder="Votre mot de passe"
                                         value={password} 
                                         onChange={(e) => setPassword(e.target.value)} 
                                         required 
@@ -91,8 +95,9 @@ export default function Login() {
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
                                         className="toggle-password"
+                                        aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
                                     >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        {showPassword ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
                                     </button>
                                 </div>
                             </div>
@@ -106,9 +111,6 @@ export default function Login() {
                                     />
                                     <span>Se souvenir de moi</span>
                                 </label>
-                                <Link to="/forgot-password" className="forgot-password-link">
-                                    Mot de passe oublié?
-                                </Link>
                             </div>
 
                             <button 

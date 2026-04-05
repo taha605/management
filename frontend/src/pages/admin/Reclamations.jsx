@@ -1,10 +1,14 @@
 import { useState, useEffect, useMemo } from 'react'
 import api from '../../services/api'
+import { useAuth } from '../../context/AuthContext'
 import AdminSidebar from '../../components/AdminSidebar'
+import SuperAdminSidebar from '../../components/SuperAdminSidebar'
 import { X } from 'lucide-react'
 import './Reclamations.css'
 
 export default function AdminReclamations() {
+    const { user } = useAuth()
+    const readOnlySuperAdmin = user?.role === 'superadmin'
     const [reclamations, setReclamations] = useState([])
     const [loading, setLoading] = useState(false)
     const [filtre, setFiltre] = useState('')
@@ -124,12 +128,22 @@ export default function AdminReclamations() {
 
     return (
         <div className="reclamations-container">
-            <AdminSidebar />
-            
+            {user?.role === 'superadmin' ? <SuperAdminSidebar /> : <AdminSidebar />}
+
             <div className="reclamations-main">
                 <div className="reclamations-header">
                     <h1 className="reclamations-title">Gestion des Reclamations</h1>
                 </div>
+
+                {readOnlySuperAdmin && (
+                    <div className="reclamations-readonly-banner" role="status">
+                        <strong>Consultation seule.</strong> Vous visualisez les mêmes données que les
+                        administrateurs opérationnels. Pour assigner des techniciens ou agir sur les dossiers,
+                        seul un <strong>administrateur</strong> peut le faire. La gestion des comptes (admins,
+                        techniciens, clients) reste dans <strong>Super admin</strong> (Administrateurs /
+                        Techniciens &amp; clients).
+                    </div>
+                )}
 
                 <div className="filters-card">
                     <div className="filtres">
@@ -229,10 +243,18 @@ export default function AdminReclamations() {
                                         </td>
                                         <td>{new Date(r.date_reclamation).toLocaleDateString('fr-FR')}</td>
                                         <td className="actions-cell">
-                                            {r.statut === 'en_attente' && (
-                                                <button onClick={() => openModal(r.id)} className="btn-assign">Assigner</button>
+                                            {r.statut === 'en_attente' && !readOnlySuperAdmin && (
+                                                <button type="button" onClick={() => openModal(r.id)} className="btn-assign">
+                                                    Assigner
+                                                </button>
                                             )}
-                                            <button onClick={() => openHistorique(r.id, r.reference)} className="btn-historique">Historique</button>
+                                            <button
+                                                type="button"
+                                                onClick={() => openHistorique(r.id, r.reference)}
+                                                className="btn-historique"
+                                            >
+                                                Historique
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}

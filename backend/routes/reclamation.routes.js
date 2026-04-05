@@ -1,7 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../config/db')
-const {verifyToken, isAdmin , isClient , isTechnicien} = require('../middleware/auth.middleware')
+const {
+    verifyToken,
+    isClient,
+    isTechnicien,
+    isAdmin,
+    isAdminOrSuperAdmin,
+    forbidSuperAdmin
+} = require('../middleware/auth.middleware')
 
 router.post('/' ,verifyToken , isClient , async(req,res) =>{
     try{
@@ -57,7 +64,7 @@ router.get('/my', verifyToken , isClient, async (req,res) =>{
     }
 })
 
-router.get('/', verifyToken, isAdmin, async(req, res) => {
+router.get('/', verifyToken, isAdminOrSuperAdmin, async(req, res) => {
     try{
         const { statut, ville, priorite, technicien_id, date_debut, date_fin } = req.query
         let query = 'SELECT * FROM v_reclamations_detail WHERE 1=1'
@@ -81,7 +88,7 @@ router.get('/', verifyToken, isAdmin, async(req, res) => {
 })
 
 
-router.put('/:id/assign' , verifyToken, isAdmin, async(req, res) => {
+router.put('/:id/assign', verifyToken, forbidSuperAdmin, isAdmin, async (req, res) => {
     try{
         const{technicien_id} = req.body
 
@@ -114,7 +121,7 @@ router.put('/:id/assign' , verifyToken, isAdmin, async(req, res) => {
     }
 })
 
-router.put('/:id/statut', verifyToken, async(req , res) => {
+router.put('/:id/statut', verifyToken, forbidSuperAdmin, async (req, res) => {
     try{
         const{statut, commentaire} = req.body
 
@@ -144,7 +151,7 @@ const [[result]] = await db.query(
     }
 })
 
-router.get('/stats' , verifyToken, isAdmin, async(req, res) => {
+router.get('/stats' , verifyToken, isAdminOrSuperAdmin, async(req, res) => {
     try{
         const [[stats]] = await db.query('SELECT * FROM v_stats_admin')
         res.json({success: true, data:stats})
@@ -166,7 +173,7 @@ router.get('/tech', verifyToken, isTechnicien, async (req, res) => {
         res.status(500).json({ success: false, message: 'Erreur serveur' })
     }
 })
-router.get('/:id/historique', verifyToken, isAdmin, async (req, res) => {
+router.get('/:id/historique', verifyToken, isAdminOrSuperAdmin, async (req, res) => {
     try {
         const [rows] = await db.query(
             `SELECT h.*, u.nom, u.prenom, u.role 

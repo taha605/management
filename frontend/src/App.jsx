@@ -7,8 +7,8 @@ import ReclamationsList from './pages/client/ReclamationsList'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminReclamations from './pages/admin/Reclamations'
 import TechnicienDashboard from './pages/technicien/Dashboard'
-import AdminUsers from './pages/admin/Users'
 import SuperAdminDashboard from './pages/superadmin/Dashboard'
+import SuperAdminEquipe from './pages/superadmin/Equipe'
 import Profile from "./pages/Profile"
 
 const PrivateRoute = ({children, roles}) =>{
@@ -51,22 +51,22 @@ function App() {
               <SuperAdminDashboard />
             </PrivateRoute>
           } />
-          
+
+          <Route path="/superadmin/equipe" element={
+            <PrivateRoute roles={['superadmin']}>
+              <SuperAdminEquipe />
+            </PrivateRoute>
+          } />
+
           <Route path="/admin" element={
-            <PrivateRoute roles={['admin']}>
+            <PrivateRoute roles={['admin', 'superadmin']}>
               <AdminDashboard/>
             </PrivateRoute>
           } />
 
           <Route path="/admin/reclamations" element={
-            <PrivateRoute roles={['admin']}>
+            <PrivateRoute roles={['admin', 'superadmin']}>
               <AdminReclamations />
-            </PrivateRoute>
-          } />
-
-          <Route path="/admin/users" element={
-            <PrivateRoute roles={['admin']}>
-              <AdminUsers />
             </PrivateRoute>
           } />
 

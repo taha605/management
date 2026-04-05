@@ -38,6 +38,22 @@
     margin: 0;
 }
 
+.admin-readonly-banner {
+    background: #e8f4f2;
+    border: 1px solid #0d9488;
+    border-left-width: 4px;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: -0.5rem 0 1.75rem;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #1a2421;
+}
+
+.admin-readonly-banner strong {
+    color: #0a7269;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -249,7 +265,8 @@
 .btn-historique:hover { background: #E8ECEA; }
 .btn-cancel { width: 100%; margin-top: 10px; padding: 10px; background: #ffffff; border:1px solid #E8ECEA }
 .btn-cancel:hover { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-    padding: 12px;
+
+.btn-cancel {padding: 12px;
     background: transparent;
     border: 1px solid #ffffff20;
     border-radius: 10px;
